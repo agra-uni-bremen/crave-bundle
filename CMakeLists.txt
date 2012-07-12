@@ -1,6 +1,7 @@
 project ( crave-bundle )
 cmake_minimum_required(VERSION 2.8)
 
+include(CTest)
 
 enable_testing()
 list(INSERT CMAKE_PREFIX_PATH 0 "${CMAKE_BINARY_DIR}")

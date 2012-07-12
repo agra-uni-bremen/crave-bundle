@@ -19,6 +19,9 @@ target_link_libraries(ex5_vec_constr crave )
 add_executable(ex6_inline_gen ex6_inline_gen/main.cpp)
 target_link_libraries(ex6_inline_gen crave )
 
+add_executable(ex7_randv_enum ex7_randv_enum/main.cpp)
+target_link_libraries(ex7_randv_enum crave )
+
 if(SystemC_FOUND)
   include_directories(crave/src metaSMT/src)
   add_subdirectory(ALU)
