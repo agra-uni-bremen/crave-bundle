@@ -1,0 +1,9 @@
+[submodule "dependencies"]
+	path = dependencies
+	url = https://github.com/agra-uni-bremen/dependencies
+[submodule "metaSMT"]
+	path = metaSMT
+	url = https://github.com/agra-uni-bremen/metaSMT
+[submodule "crave"]
+	path = crave
+	url = https://github.com/agra-uni-bremen/crave.git
