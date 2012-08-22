@@ -84,10 +84,16 @@ if ! [ -d dependencies ]; then
 fi
 
 cd dependencies
-./build "$DEPS" $REQUIRES &&
+
 if [ "$BUILD_CMAKE" = "yes" ]; then
   ./build "$DEPS" $CMAKE_PACKAGE &&
   CMAKE=$DEPS/$CMAKE_PACKAGE/bin/cmake
+  export PATH="$DEPS/$CMAKE_PACKAGE/bin:$PATH"
+fi
+
+if ! ./build "$DEPS" $REQUIRES; then
+  echo "Building dependencies failed. Please see above for error"
+  exit 3
 fi
 
 cd $BUILD_DIR && 
