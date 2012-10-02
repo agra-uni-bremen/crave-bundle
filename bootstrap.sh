@@ -3,7 +3,7 @@ SRC_DIR=$( cd $(dirname $0) && pwd)
 
 BUILD_DIR=$PWD/build
 
-BOOST=boost-1_46_1
+BOOST=boost-1_50_0
 REQUIRES="
   SWORD-1.1
   cudd-2.4.2
