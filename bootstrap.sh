@@ -36,8 +36,9 @@ usage: $0 [--free] [--non-free] build
    -Dvar=val      pass options to cmake
   --cmake=/p/t/c  use this version of cmake
   --cmake         build a custom cmake version
-  --source        specify the path to the sources, if a
-   -s             download is not wanted
+  --cache         specify the path to the sources, if a
+   -ca            download is not wanted
+   -j <num>       number of threads to compile the dependencies
   <build>         the folder to setup the build environment in
 EOF
   exit 1
@@ -54,7 +55,8 @@ while [[ "$@" ]]; do
     --clean|-c)   CLEAN="rm -rf";;
     --cmake=*)    CMAKE="${1#--cmake=}";;
     --cmake)      BUILD_CMAKE="yes";;
-    --source|-s)  SOURCE="$2"; shift;;
+    --cache|-ca)  CACHE="$2"; shift;;
+     -j)          NUM_THREADS=$2; shift;;
              *)   ## assume build dir
                   BUILD_DIR="$1" ;;
   esac
@@ -78,8 +80,8 @@ if [ -z "$BOOST_ROOT" ]; then
   REQUIRES="$BOOST $REQUIRES"
   BOOST_ROOT="$DEPS/$BOOST"
 fi &&
-if [ -n "$SOURCE" ]; then
-  SOURCE="-s $(mk_and_abs_dir ${SOURCE})"
+if [ -n "$CACHE" ]; then
+  CACHE="-c $(mk_and_abs_dir ${CACHE})"
 fi
 
 
@@ -97,7 +99,7 @@ if [ "$BUILD_CMAKE" = "yes" ]; then
   export PATH="$DEPS/$CMAKE_PACKAGE/bin:$PATH"
 fi
 
-if ! ./build "$DEPS" $SOURCE $REQUIRES; then
+if ! ./build -j ${NUM_THREADS:-1} "$DEPS" $CACHE $REQUIRES; then
   echo "Building dependencies failed. Please see above for error"
   exit 3
 fi
