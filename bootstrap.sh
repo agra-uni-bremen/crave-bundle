@@ -88,7 +88,10 @@ cd dependencies
 if [ "$BUILD_CMAKE" = "yes" ]; then
   ./build "$DEPS" $CMAKE_PACKAGE &&
   CMAKE=$DEPS/$CMAKE_PACKAGE/bin/cmake
-  export PATH="$DEPS/$CMAKE_PACKAGE/bin:$PATH"
+fi
+
+if [ -x "$CMAKE" ]; then
+  export PATH="$(dirname $CMAKE):$PATH"
 fi
 
 if ! ./build "$DEPS" $REQUIRES; then
