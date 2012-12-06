@@ -19,15 +19,24 @@ add_subdirectory(examples)
 ##                CPack settings                          ##
 ############################################################
 
+option( CRAVE_BUNDLE_PACKAGE_BY_DATE "use date for package name instead of git description" on)
 
-# CPack version numbers for release tarball name.
-if(UNIX)
-execute_process(COMMAND date +%Y OUTPUT_VARIABLE CPACK_PACKAGE_VERSION_MAJOR ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND date +%m OUTPUT_VARIABLE CPACK_PACKAGE_VERSION_MINOR ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND date +%d OUTPUT_VARIABLE CPACK_PACKAGE_VERSION_PATCH ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+if( CRAVE_BUNDLE_PACKAGE_BY_DATE )
+
+  # CPack version numbers for release tarball name.
+  if(UNIX)
+  execute_process(COMMAND date +%Y OUTPUT_VARIABLE CPACK_PACKAGE_VERSION_MAJOR ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND date +%m OUTPUT_VARIABLE CPACK_PACKAGE_VERSION_MINOR ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND date +%d OUTPUT_VARIABLE CPACK_PACKAGE_VERSION_PATCH ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+  endif()
+  set(VERSION "${CPACK_PACKAGE_VERSION_MAJOR}-${CPACK_PACKAGE_VERSION_MINOR}-${CPACK_PACKAGE_VERSION_PATCH}")
+else()
+  include(cmake/get_git_version.cmake)
+  get_git_version(VERSION crave-bundle-)
 endif()
 
-set(VERSION "${CPACK_PACKAGE_VERSION_MAJOR}-${CPACK_PACKAGE_VERSION_MINOR}-${CPACK_PACKAGE_VERSION_PATCH}")
+message(STATUS "crave-bundle VERSION: ${VERSION}")
+
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "SMT programming library")
 set(CPACK_PACKAGE_VENDOR "metaSMT development team")
