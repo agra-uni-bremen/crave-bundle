@@ -20,8 +20,7 @@ CMAKE_ARGS="
 "
 
 
-
-if ! [[ "$1" ]]; then
+usage() {
   cat << EOF
 $0 sets up a metaSMT build folder.
 usage: $0 [--free] [--non-free] build
@@ -42,17 +41,22 @@ usage: $0 [--free] [--non-free] build
   <build>         the folder to setup the build environment in
 EOF
   exit 1
+}
+
+if ! [[ "$1" ]]; then
+  usage
 fi
 
 
 while [[ "$@" ]]; do
   case $1 in
+    --usage|--help|-h) usage;;
     --boost=*)    BOOST=""; BOOST_ROOT="${1#--boost=}";;
     --deps|-d)    DEPS="$2"; shift;;
     --install|-i) INSTALL="$2"; shift;;
     --mode|-m)    CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE=$2"; shift;;
      -D*)         CMAKE_ARGS="$CMAKE_ARGS $1";;
-    --clean|-c)   CLEAN="rm -rf";;
+    --clean|-c)   CLEAN="true";;
     --cmake=*)    CMAKE="${1#--cmake=}";;
     --cmake)      BUILD_CMAKE="yes";;
     --cache|-ca)  CACHE="$2"; shift;;
