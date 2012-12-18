@@ -20,8 +20,7 @@ CMAKE_ARGS="
 "
 
 
-
-if ! [[ "$1" ]]; then
+usage() {
   cat << EOF
 $0 sets up a metaSMT build folder.
 usage: $0 [--free] [--non-free] build
@@ -36,22 +35,32 @@ usage: $0 [--free] [--non-free] build
    -Dvar=val      pass options to cmake
   --cmake=/p/t/c  use this version of cmake
   --cmake         build a custom cmake version
+  --cache         specify the path to the sources, if a
+   -ca            download is not wanted
+   -j <num>       number of threads to compile the dependencies
   <build>         the folder to setup the build environment in
 EOF
   exit 1
+}
+
+if ! [[ "$1" ]]; then
+  usage
 fi
 
 
 while [[ "$@" ]]; do
   case $1 in
+    --usage|--help|-h) usage;;
     --boost=*)    BOOST=""; BOOST_ROOT="${1#--boost=}";;
     --deps|-d)    DEPS="$2"; shift;;
     --install|-i) INSTALL="$2"; shift;;
     --mode|-m)    CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE=$2"; shift;;
      -D*)         CMAKE_ARGS="$CMAKE_ARGS $1";;
-    --clean|-c)   CLEAN="rm -rf";;
+    --clean|-c)   CLEAN="true";;
     --cmake=*)    CMAKE="${1#--cmake=}";;
     --cmake)      BUILD_CMAKE="yes";;
+    --cache|-ca)  CACHE="$2"; shift;;
+     -j)          NUM_THREADS=$2; shift;;
              *)   ## assume build dir
                   BUILD_DIR="$1" ;;
   esac
@@ -74,6 +83,9 @@ DEPS=$(mk_and_abs_dir ${DEPS:-$BUILD_DIR}) &&
 if [ -z "$BOOST_ROOT" ]; then
   REQUIRES="$BOOST $REQUIRES"
   BOOST_ROOT="$DEPS/$BOOST"
+fi &&
+if [ -n "$CACHE" ]; then
+  CACHE="-c $(mk_and_abs_dir ${CACHE})"
 fi
 
 
@@ -94,7 +106,7 @@ if [ -x "$CMAKE" ]; then
   export PATH="$(dirname $CMAKE):$PATH"
 fi
 
-if ! ./build "$DEPS" $REQUIRES; then
+if ! ./build -j ${NUM_THREADS:-1} "$DEPS" $CACHE $REQUIRES; then
   echo "Building dependencies failed. Please see above for error"
   exit 3
 fi
