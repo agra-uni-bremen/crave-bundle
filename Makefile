@@ -14,6 +14,10 @@ ifdef CMAKE
   BOOSTRAP_ARGS += --cmake=${CMAKE}
 endif
 
+ifdef CACHE
+  BOOSTRAP_ARGS += --cache ${CACHE}
+endif
+
 ${BUILD}/Makefile:
 	./bootstrap.sh -d ${SRCDIR}/deps -m RELEASE ${BUILD} ${BOOSTRAP_ARGS}
 
