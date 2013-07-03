@@ -6,4 +6,4 @@
 	url = https://github.com/agra-uni-bremen/metaSMT
 [submodule "crave"]
 	path = crave
-	url = https://github.com/agra-uni-bremen/crave.git
+	url = https://github.com/hoangmle/crave.git
