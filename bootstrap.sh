@@ -5,7 +5,8 @@ BUILD_DIR=$PWD/build
 
 BOOST=boost-1_50_0
 REQUIRES="
-  SWORD-1.1
+  boolector-1.5.118
+  minisat-git
   cudd-2.4.2
 "
 
