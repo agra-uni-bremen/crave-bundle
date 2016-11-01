@@ -1,4 +1,8 @@
- Constrained RAndom Verification Enviroment - CRAVE
+**NEWS** We are preparing to release CRAVE 2.x code on GitHub. The new version does not need crave-bundle.
+Meanwhile, please visit http://systemc-verification.org/crave for a preview of CRAVE 2.x including an integration with 
+[UVM-SystemC](http://accellera.org/activities/working-groups/systemc-verification/uvm-systemc-faq).  
+
+Constrained RAndom Verification Enviroment - CRAVE
 ====================================================
 
 For feedback and bug reports: crave@informatik.uni-bremen.de
